@@ -1,0 +1,62 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="calendar"></div>
+
+@section Scripts
+{
+
+    <script src="https://unpkg.com/js-year-calendar@latest/dist/js-year-calendar.min.js"></script>
+    <script type="text/javascript">
+
+        (function () {
+            new Calendar('.calendar', {
+                //disabledWeekDays: [0,6],
+                dataSource: [
+                    {
+                        id: 0,
+                        name: 'Google I/O',
+                        location: 'San Francisco, CA',
+                        startDate: new Date(2024, 4, 28),
+                        endDate: new Date(2024, 4, 29)
+                    },
+                    {
+                        id: 1,
+                        name: 'Microsoft Convergence',
+                        location: 'New Orleans, LA',
+                        startDate: new Date(2024, 2, 16),
+                        endDate: new Date(2024, 2, 19)
+                    }
+                ]
+            });
+
+            console.log($(".calendar .month tr"));
+            $.each($(".month tr"),(index, week) => {
+                console.log($(week));
+                const $days = $(week).children(".day");
+                console.log($days);
+                if (($days).length < 7)
+                {
+                    console.log('no 7 days');
+                    return;
+                }
+                const applyWeekend = (day) => {
+
+                    if (day.hasClass('old')) return;
+                    day.addClass('weekend');
+                };
+                applyWeekend($($days[0]));
+                applyWeekend($($days[6]));
+            });
+        })();
+
+    </script>
+}
