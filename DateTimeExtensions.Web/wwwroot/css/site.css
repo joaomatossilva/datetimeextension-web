@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+td.weekend{
+  background-color: #f3f3f3 !important;
+  color: #797979;
+}

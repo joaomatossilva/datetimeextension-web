@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Text.Json
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -9,7 +10,11 @@
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
-<div class="calendar"></div>
+<div class="row">
+    <div class="md-8"><div class="calendar"></div></div>
+    <div class="md-4"> Holidays </div>
+</div>
+
 
 @section Scripts
 {
@@ -18,39 +23,31 @@
     <script type="text/javascript">
 
         (function () {
-            new Calendar('.calendar', {
-                //disabledWeekDays: [0,6],
-                dataSource: [
-                    {
-                        id: 0,
-                        name: 'Google I/O',
-                        location: 'San Francisco, CA',
-                        startDate: new Date(2024, 4, 28),
-                        endDate: new Date(2024, 4, 29)
-                    },
-                    {
-                        id: 1,
-                        name: 'Microsoft Convergence',
-                        location: 'New Orleans, LA',
-                        startDate: new Date(2024, 2, 16),
-                        endDate: new Date(2024, 2, 19)
-                    }
-                ]
+
+            const yearObservances = @Json.Serialize(Model.YearObservances);
+
+            const calendar = new Calendar('.calendar', {
+                dataSource: (current) => {
+                    const year = current.year;
+                    const obss = yearObservances[year].map(x => {
+                       return  {
+                           startDate: new Date(x.date),
+                           endDate: new Date(x.date),
+                           name: x.name,
+                       };
+                    });
+                    console.log(obss);
+                    return obss;
+                }
             });
 
-            console.log($(".calendar .month tr"));
             $.each($(".month tr"),(index, week) => {
-                console.log($(week));
                 const $days = $(week).children(".day");
-                console.log($days);
                 if (($days).length < 7)
                 {
-                    console.log('no 7 days');
                     return;
                 }
                 const applyWeekend = (day) => {
-
-                    if (day.hasClass('old')) return;
                     day.addClass('weekend');
                 };
                 applyWeekend($($days[0]));
