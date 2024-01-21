@@ -17,7 +17,7 @@ public class IndexModel : PageModel
     public IndexModel(ILogger<IndexModel> logger)
     {
         _logger = logger;
-        Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
+        Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt-PT");
         Language = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
     }
 
