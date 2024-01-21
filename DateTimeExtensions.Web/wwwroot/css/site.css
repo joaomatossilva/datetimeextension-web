@@ -25,3 +25,7 @@ td.weekend{
   background-color: #f3f3f3 !important;
   color: #797979;
 }
+
+.holiday-name {
+    font-weight: bold;
+}

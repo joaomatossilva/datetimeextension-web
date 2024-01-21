@@ -7,30 +7,28 @@ using WorkingDays;
 
 public class IndexModel : PageModel
 {
-    public Dictionary<int, HolidayObservance[]> YearObservances { get; set; }
+    public HolidayObservance[] YearObservances { get; set; }
     public int StartYear { get; set; } = DateTime.Today.Year - 1;
     public int EndYear { get; set; } = DateTime.Today.Year + 3;
+    public string Language { get; set; } = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
     private readonly ILogger<IndexModel> _logger;
 
     public IndexModel(ILogger<IndexModel> logger)
     {
         _logger = logger;
+        Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
     }
 
     public void OnGet()
     {
-        var ci = new WorkingDayCultureInfo("pt-PT");
-        YearObservances = new Dictionary<int, HolidayObservance[]>();
-        for (int year = StartYear; year < EndYear; year++)
+        var year = DateTime.Today.Year;
+        var ci = new WorkingDayCultureInfo();
+        YearObservances = ci.GetHolidaysOfYear(year).Select(x => new HolidayObservance
         {
-            var observances = ci.GetHolidaysOfYear(year).Select(x => new HolidayObservance
-            {
-                Name = x.Name,
-                Date = x.GetInstance(year)
-            }).ToArray();
-            YearObservances[year] = observances;
-        }
+            Name = x.Name,
+            Date = x.GetInstance(year)
+        }).OrderBy(x => x.Date).ToArray();
     }
 
     public class HolidayObservance

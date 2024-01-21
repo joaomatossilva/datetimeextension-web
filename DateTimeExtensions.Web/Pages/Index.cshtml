@@ -6,13 +6,29 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4"> <img src="https://github.com/joaomatossilva/DateTimeExtensions/raw/master/assets/datetimeextensions-60-logo.png" alt="DateTimeExtensions" style="max-width: 100%;"> DateTimeExtensions</h1>
+    <p>Just a sample site of possible usage of <a href="https://github.com/joaomatossilva/DateTimeExtensions">DateTimeExtensions nuget package</a>.</p>
 </div>
 
 <div class="row">
-    <div class="md-8"><div class="calendar"></div></div>
-    <div class="md-4"> Holidays </div>
+    <div class="col-9"><div class="calendar"></div></div>
+    <div class="col-3"> 
+        <h4>Holidays</h4>
+        @foreach(var observance in Model.YearObservances)
+        {
+            <p> 
+                @if(observance.Date is null)
+                {
+                    <text>--/--</text>
+                }
+                else
+                {
+                    @(string.Format("{0:M}", observance.Date.Value))
+                }
+                <span class="holiday-name">@observance.Name</span>
+            </p>
+        }
+    </div>
 </div>
 
 
@@ -20,6 +36,7 @@
 {
 
     <script src="https://unpkg.com/js-year-calendar@latest/dist/js-year-calendar.min.js"></script>
+    <script src="https://unpkg.com/js-year-calendar@latest/locales/js-year-calendar.@(Model.Language).js"></script>
     <script type="text/javascript">
 
         (function () {
@@ -28,17 +45,17 @@
 
             const calendar = new Calendar('.calendar', {
                 dataSource: (current) => {
-                    const year = current.year;
-                    const obss = yearObservances[year].map(x => {
+                    const obss = yearObservances.map(x => {
                        return  {
                            startDate: new Date(x.date),
                            endDate: new Date(x.date),
                            name: x.name,
                        };
                     });
-                    console.log(obss);
                     return obss;
-                }
+                },
+                displayHeader: false,
+                language: "@Model.Language",
             });
 
             $.each($(".month tr"),(index, week) => {
