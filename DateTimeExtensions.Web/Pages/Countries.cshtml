@@ -8,6 +8,6 @@
 <div>
     @foreach (var locale in Model.Locales)
     {
-        <p><a href="@Url.Page("Calendar", new { locale = locale.Identifier, year = Model.Year })">@locale.Name (@locale.Identifier)</a></p>
+        <p><a href="@Url.Page("Calendar", new { locale = locale.Identifier, year = Model.Year })"><span class="fi fi-@(locale.Country.ToLower())"></span> @locale.Name (@locale.Identifier)</a></p>
     }
 </div>

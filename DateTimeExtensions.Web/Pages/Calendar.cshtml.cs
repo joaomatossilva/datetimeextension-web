@@ -18,6 +18,7 @@ public class CalendarModel : PageModel
     public int StartYear { get; set; } = DateTime.Today.Year - 1;
     public int EndYear { get; set; } = DateTime.Today.Year + 3;
     public string Language { get; set; }
+    public string Country { get; set; }
 
     private readonly ILogger<IndexModel> _logger;
 
@@ -32,6 +33,7 @@ public class CalendarModel : PageModel
 
         var regionInfo = new RegionInfo(locale);
         CountryName = regionInfo.DisplayName;
+        Country = regionInfo.TwoLetterISORegionName;
         Locale = locale;
 
         Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(locale);

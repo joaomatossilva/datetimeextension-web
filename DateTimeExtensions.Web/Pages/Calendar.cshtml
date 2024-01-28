@@ -10,7 +10,7 @@
 </div>
 
 <div class="row">
-    <h4>@Model.CountryName (@Model.Locale) <a href="@Url.Page("Countries", new { year = Model.Year})">change</a></h4>
+    <h4> <span class="fi fi-@(Model.Country.ToLower())"></span> @Model.CountryName (@Model.Locale) <a href="@Url.Page("Countries", new { year = Model.Year})">change</a></h4>
 </div>
 
 <div class="row">
