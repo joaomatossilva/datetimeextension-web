@@ -3,38 +3,40 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DateTimeExtensions.Web.Pages;
 
-using WorkingDays;
-
-public class IndexModel : PageModel
+public class IndexModel(ILogger<IndexModel> logger) : PageModel
 {
-    public HolidayObservance[] YearObservances { get; set; }
-    public int StartYear { get; set; } = DateTime.Today.Year - 1;
-    public int EndYear { get; set; } = DateTime.Today.Year + 3;
-    public string Language { get; set; }
+    private readonly ILogger<IndexModel> _logger = logger;
 
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
-    {
-        _logger = logger;
-        Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("pt-PT");
-        Language = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
-    }
-
-    public void OnGet()
+    public IActionResult OnGet()
     {
         var year = DateTime.Today.Year;
-        var ci = new WorkingDayCultureInfo();
-        YearObservances = ci.GetHolidaysOfYear(year).Select(x => new HolidayObservance
-        {
-            Name = x.Name,
-            Date = x.GetInstance(year)
-        }).OrderBy(x => x.Date).ToArray();
-    }
 
-    public class HolidayObservance
-    {
-        public DateTime? Date { get; set; }
-        public string Name { get; set; }
+        var userLanguages = Request.GetTypedHeaders()
+            .AcceptLanguage
+            .OrderByDescending(x => x.Quality ?? 1)
+            .Select(x => x.Value.ToString());
+
+        string? locale = null;
+        foreach (var userLanguage in userLanguages)
+        {
+            if (userLanguage.Length == 2)
+            {
+                var foundMatch = AvailableLocales.List.Value.FirstOrDefault(x => x.Substring(0, 2) == userLanguage);
+                if (foundMatch != null)
+                {
+                    locale = foundMatch;
+                    break;
+                }
+            }
+
+            if (AvailableLocales.List.Value.Contains(userLanguage))
+            {
+                locale = userLanguage;
+                break;
+            }
+        }
+
+        locale ??= "pt-PT";
+        return RedirectToPage("Calendar", new { locale, year });
     }
 }

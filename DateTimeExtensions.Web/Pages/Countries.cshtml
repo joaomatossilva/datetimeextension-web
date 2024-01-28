@@ -1,0 +1,13 @@
+@page
+@model DateTimeExtensions.Web.Pages.Countries
+
+@{
+    ViewData["Title"] = "Select Country";
+}
+
+<div>
+    @foreach (var locale in Model.Locales)
+    {
+        <p><a href="@Url.Page("Calendar", new { locale = locale.Identifier, year = Model.Year })">@locale.Name (@locale.Identifier)</a></p>
+    }
+</div>
