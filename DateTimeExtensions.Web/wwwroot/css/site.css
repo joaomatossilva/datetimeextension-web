@@ -29,3 +29,7 @@ td.weekend{
 .holiday-name {
     font-weight: bold;
 }
+
+.card a {
+  text-decoration: none;
+}
