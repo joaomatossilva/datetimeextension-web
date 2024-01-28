@@ -15,8 +15,6 @@ public class CalendarModel : PageModel
     public int Year { get; set; }
 
     public HolidayObservance[] YearObservances { get; set; }
-    public int StartYear { get; set; } = DateTime.Today.Year - 1;
-    public int EndYear { get; set; } = DateTime.Today.Year + 3;
     public string Language { get; set; }
     public string Country { get; set; }
 

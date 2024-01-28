@@ -14,7 +14,18 @@
 </div>
 
 <div class="row">
-    <div class="col-md-9"><div class="calendar"></div></div>
+    <div class="col-md-9">
+        <div class="alert alert-dark text-center" role="doc-subtitle">
+            <h3>
+                <a href="@Url.Page("Calendar", new { year = Model.Year - 1, locale = @Model.Locale })"> &lt;&lt; </a>
+                @Model.Year
+                <a href="@Url.Page("Calendar", new { year = Model.Year + 1, locale = @Model.Locale })"> &gt;&gt; </a>
+            </h3>
+        </div>
+
+
+        <div class="calendar"></div>
+    </div>
     <div class="col-md-3">
         <h4>Holidays</h4>
         @foreach(var observance in Model.YearObservances)
@@ -59,6 +70,7 @@
                 },
                 displayHeader: false,
                 language: "@Model.Language",
+                startYear: @Model.Year,
             });
 
             $.each($(".month tr"),(index, week) => {
